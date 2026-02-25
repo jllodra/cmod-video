@@ -15,7 +15,7 @@ It combines:
 
 ## Background
 
-I am known (or was known) as herotyc, a tracker/demoscene musician and co-founder of #modulez circa 2000.
+I am known (or was known) as **herotyc**, a tracker/demoscene musician and co-founder of **#modulez** circa 2000.
 
 This project started in a very personal way. I simply wanted a nicer way to revisit the tracker songs I grew up with, the ones that
 stayed with me for years. I wanted to render them, keep them, and have them ready on YouTube so I could return to them easily and enjoy
@@ -23,7 +23,7 @@ them again, with the care and presentation they deserved.
 
 That was the original goal, nothing more.
 
-You can check the channel here: youtube.com/@cmod-video
+You can check the channel here: [@cmod-video](https://youtube.com/@cmod-video)
 
 As I kept working on it, things slowly escalated. What began as a rendering tool turned into a real-time player, and then into
 something that could also do proper and beautiful offline rendering.
@@ -32,7 +32,7 @@ At some point it stopped being just a personal utility and started feeling like 
 
 So this release is that: a tool born from nostalgia, built with a lot of attention, and made to enjoy module music properly, with modern amenities like loudness normalization and high-quality rendering.
 
-Special thanks to the original #modulez crew.
+Special thanks to the **#modulez** buddies.
 
 Enjoy.
 
