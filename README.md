@@ -1,6 +1,6 @@
 # cmod-video
 
-`cmod-video` is a module music player / renderer focused on tracker-style visuals (MOD/XM/IT/S3M), with real-time preview and offline MKV rendering.
+`cmod-video` is a module music player / renderer focused on tracker-style visuals (MOD/XM/IT/S3M), with real-time preview and offline MKV rendering perfect for youtube.
 
 It combines:
 - pattern view with smooth scrolling option
