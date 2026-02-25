@@ -1,4 +1,4 @@
-# cmod-video
+# cmod-video [COMING SOON]
 
 `cmod-video` is a module music player / renderer focused on tracker-style visuals (MOD/XM/IT/S3M), with real-time preview and offline MKV rendering perfect for youtube.
 
