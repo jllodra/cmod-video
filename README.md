@@ -32,6 +32,8 @@ At some point it stopped being just a personal utility and started feeling like 
 
 So this release is that: a tool born from nostalgia, built with a lot of attention, and made to enjoy module music properly, with modern amenities like loudness normalization and high-quality rendering.
 
+Special thanks to the original #modulez crew.
+
 Enjoy.
 
 ## Features
