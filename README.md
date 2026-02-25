@@ -56,7 +56,7 @@ Enjoy.
 
 ## Requirements (Windows)
 - Microsoft Visual C++ Redistributable 2015-2022 (x64)
-- FFmpeg available in `PATH` (for `--render`)
+- FFmpeg available in `PATH` (for `--render`) - It is included in the .zip anyway
 - Runtime DLLs included with the release package
 
 ## Usage
