@@ -1,13 +1,13 @@
-# cmod-video [COMING SOON]
+# cmod-video
 
-`cmod-video` is a module music player / renderer focused on tracker-style visuals (MOD/XM/IT/S3M), with real-time preview and offline MKV rendering perfect for youtube.
+`cmod-video` is a module music player / renderer focused on tracker-style visuals (MOD/XM/IT/S3M), with real-time preview and offline MKV rendering.
 
 It combines:
 - pattern view with smooth scrolling option
 - per-channel waveforms / mini scopes
 - VU meters + FFT visuals
 - tracker-inspired UI/theme system
-- optional playlist mode (current directory)
+- built-in song selector/browser (rooted at `./music`)
 
 ## In Action
 
@@ -15,7 +15,7 @@ It combines:
 
 ## Background
 
-I am known (or was known) as **herotyc**, a tracker/demoscene musician and co-founder of **#modulez** circa 2000.
+I am known (or was known) as herotyc, a tracker/demoscene musician and co-founder of #modulez circa 2000.
 
 This project started in a very personal way. I simply wanted a nicer way to revisit the tracker songs I grew up with, the ones that
 stayed with me for years. I wanted to render them, keep them, and have them ready on YouTube so I could return to them easily and enjoy
@@ -23,7 +23,7 @@ them again, with the care and presentation they deserved.
 
 That was the original goal, nothing more.
 
-You can check the channel here: [@cmod-video](https://youtube.com/@cmod-video)
+You can check the channel here: youtube.com/@cmod-video
 
 As I kept working on it, things slowly escalated. What began as a rendering tool turned into a real-time player, and then into
 something that could also do proper and beautiful offline rendering.
@@ -31,8 +31,6 @@ something that could also do proper and beautiful offline rendering.
 At some point it stopped being just a personal utility and started feeling like something worth sharing.
 
 So this release is that: a tool born from nostalgia, built with a lot of attention, and made to enjoy module music properly, with modern amenities like loudness normalization and high-quality rendering.
-
-Special thanks to the **#modulez** buddies.
 
 Enjoy.
 
@@ -47,8 +45,8 @@ Enjoy.
   - `trackLayout=2`: vertical waveform (modern)
 - Smooth pattern scroll (`smoothPattern=1`) with centered row highlight.
 - Pitch-based per-channel `orbit` markers (tracker dot reinterpretation), with optional trails and theme-controlled motion/appearance
-- Playlist mode when started without a file (scans current directory).
-- Keyboard navigation between songs in playlist (`PageUp` / `PageDown`).
+- Song selector/browser when started without a file (directories + modules).
+- Keyboard navigation between songs in playlist (`PageUp` / `PageDown`) during playback.
 - Loop mode for preview (`[playback] loop=1`).
 - Fullscreen in preview (double click or `F`).
 - EBU R-128 loudness/tpeak norm.
@@ -56,10 +54,16 @@ Enjoy.
 
 ## Requirements (Windows)
 - Microsoft Visual C++ Redistributable 2015-2022 (x64)
-- FFmpeg available in `PATH` (for `--render`) - It is included in the .zip anyway
+- FFmpeg available in `PATH` (for `--render`)
 - Runtime DLLs included with the release package
 
 ## Usage
+
+### Local player (double click)
+You can use `cmod_video.exe` as a local player by double-clicking it.
+
+- If started without a file argument, it opens the built-in module selector (rooted at `./music`).
+- You can browse folders, pick a song, and play directly.
 
 ### Preview (default)
 Run with a module file:
@@ -76,8 +80,30 @@ This starts the real-time preview window with audio/video.
 cmod_video.exe --render "song.it"
 ```
 
+Note:
+- On Windows, `cmod_video.exe` is built as a GUI app, so launching `--render` directly from terminal may return control immediately while rendering continues in background.
+- `cmod-render.ps1` is recommended for rendering because it waits for completion and writes `out.log` / `err.log` for easier troubleshooting.
+
 Output:
 - final file: `out.mkv`
+
+### Recommended render helper (`cmod-render.ps1`)
+For rendering, using the helper script is recommended:
+
+```txt
+.\cmod-render.ps1 -Module ".\music\your_mod.it"
+```
+
+### Render with a skin theme (`theme_skin.ini`)
+You can render using an alternate theme/skin file:
+
+```txt
+cmod_video.exe --render --theme "theme_skin.ini" "song.it"
+```
+
+Skin preview (courtesy of **khrome**):
+
+[![Skin preview by khrome](https://img.youtube.com/vi/ihovsltLtsg/0.jpg)](https://www.youtube.com/watch?v=ihovsltLtsg)
 
 ## Command-line arguments
 
@@ -88,6 +114,8 @@ Output:
 ### Display / metadata
 - `--title "TEXT"`
   - Override displayed title.
+- `--theme "FILE.ini"`
+  - Use a specific theme file instead of `theme.ini` (for example: `theme_skin.ini`).
 - `--w WIDTH`
   - Override width in pixels (otherwise uses `[playback] width` from theme).
 - `--h HEIGHT`
@@ -112,6 +140,8 @@ Output:
   - Toggle fullscreen
 - `T`
   - Reload `theme.ini` live (visual/theme reload)
+- `Backspace`
+  - Return to song selector (when started without CLI file)
 
 ### Visual toggles (runtime, preview only)
 - `1` / `2` / `3`
@@ -125,11 +155,11 @@ Output:
 - `7`
   - Toggle `track2MiniScope`
 - `8`
-  - Toggle `trackColors`
+  - Toggle `waveColors`
 - `9`
   - Toggle mini badge (`miniEnabled`)
 
-### Playlist (when started without a file, or when current file belongs to current-dir playlist)
+### Playlist (during playback)
 - `PageDown`
   - Next song
 - `PageUp`
@@ -160,15 +190,19 @@ Output:
 - Left click on progress bar
   - Seek to that position in the song (preview mode)
 
-## Playlist behavior
+## Song selector / playlist behavior
 If you start `cmod_video.exe` without a module file:
-- the program scans the current directory for module files (`.mod`, `.xm`, `.it`, `.s3m`)
-- invalid/unreadable files are skipped automatically
-- the first valid file is loaded
-- in preview:
-  - `loop=0` -> automatically advances to next song at end
-  - `loop=1` -> loops current song
-- when the playlist ends and loop is off, the program exits
+- it opens an in-app selector/browser (no OS file picker)
+- browser root is `./music` (fallback to current directory if `./music` doesn't exist)
+- `Enter` opens a directory or starts a selected module
+- `Backspace` / `Left` goes to parent directory
+- `Esc` exits
+
+During playback in that mode:
+- `Backspace` returns to the selector
+- `PageUp` / `PageDown` jumps to previous/next song in current folder playlist
+- if `loop=0`, when a song ends it returns to the selector
+- if `loop=1`, current song loops
 
 ## Themes (`theme.ini`)
 The UI is themeable through `theme.ini`.
@@ -216,6 +250,7 @@ If you change playback settings, restart the program.
 - `track2MiniScope = 0|1`
 - `miniFft = 0|1`
 - `sideFft = 0|1`
+- `channelVuBars = 0|1`
 
 #### `[playback]`
 - `width`, `height`
@@ -227,6 +262,10 @@ If you change playback settings, restart the program.
 ### Examples
 - `theme.example.ini` includes documented variables and comments.
 - Copy it to `theme.ini` and customize colors/layout.
+- You can also use `theme_skin.ini` directly with `--theme`.
+
+## Contributing themes / skins
+If you want to collaborate with new themes or skins, open an issue and you are welcome.
 
 ## Troubleshooting
 
