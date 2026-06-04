@@ -239,6 +239,9 @@ These are startup-only:
 - `loop`
 - `profile`
 - `subsong` (if set there)
+- `fontPath`
+- `scrollerFontPath`
+- `scrollerText`
 
 If you change playback settings, restart the program.
 
@@ -251,6 +254,9 @@ If you change playback settings, restart the program.
 - `miniFft = 0|1`
 - `sideFft = 0|1`
 - `channelVuBars = 0|1`
+- `channelVuBarHeight = 0..1 or >1` (`0..1` = available upward span, `>1` = pixels; optional)
+- `channelVuBarPos = 0..1` (`0=left`, `0.5=center`, `1=right`)
+- `channelVuBarWidth = 0..1 or >1` (`0..1` = channel fraction, `>1` = pixels; optional)
 
 #### `[playback]`
 - `width`, `height`
@@ -258,6 +264,12 @@ If you change playback settings, restart the program.
 - `fullscreen = 0|1`
 - `loop = 0|1`
 - `profile = 0|1` (prints performance info in preview)
+- `fontPath = assets/JetBrainsMono-Regular.ttf`
+- `scrollerFontPath = assets/DejaVuSansMono.ttf`
+- `scrollerText = "%INSTRUMENTS%%SAMPLES%%MESSAGE%   %CMODSUPPORT%  "`
+  - Optional scroller template. Available placeholders: `%INSTRUMENTS%`, `%SAMPLES%`, `%MESSAGE%`, `%CMODSUPPORT%`.
+  - Quote the value to preserve leading or trailing spaces, for example `scrollerText = "  %MESSAGE%  "`.
+  - Inside quoted values, escape literal quotes and backslashes as `\"` and `\\`.
 
 ### Examples
 - `theme.example.ini` includes documented variables and comments.
