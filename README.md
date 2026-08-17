@@ -23,7 +23,7 @@ them again, with the care and presentation they deserved.
 
 That was the original goal, nothing more.
 
-You can check the channel here: youtube.com/@cmod-video
+You can check the channel here: https://youtube.com/@cmod-video
 
 As I kept working on it, things slowly escalated. What began as a rendering tool turned into a real-time player, and then into
 something that could also do proper and beautiful offline rendering.
@@ -37,7 +37,7 @@ Enjoy.
 ## Features
 - Supports tracker modules via `libopenmpt` (MOD/XM/IT/S3M and more...).
 - Real-time preview mode (default) with audio + video.
-- Offline render mode to `out.mkv` (`--render`) via FFmpeg.
+- Offline render mode to `out.mkv` (`--render`) using the built-in H.264 + FLAC encoder.
 - Themeable UI/colors (`theme.ini`).
 - Multiple track(channel) layouts:
   - `trackLayout=0`: legacy/classic
@@ -54,7 +54,6 @@ Enjoy.
 
 ## Requirements (Windows)
 - Microsoft Visual C++ Redistributable 2015-2022 (x64)
-- FFmpeg available in `PATH` (for `--render`)
 - Runtime DLLs included with the release package
 
 ## Usage
@@ -127,7 +126,7 @@ Skin preview (courtesy of **khrome**):
 - `--no-audio`
   - Disable audio output (debug/testing).
 - `--no-pipes`
-  - In render mode, do not use FFmpeg pipes (writes huge raw files instead).
+  - Compatibility/debug option: write `video.rgb` and `audio.pcm` instead of an encoded MKV.
 - `--no-osc`
   - Disable oscilloscope-related visuals (debug/testing/comparison).
 
@@ -282,10 +281,8 @@ If you want to collaborate with new themes or skins, open an issue and you are w
 ## Troubleshooting
 
 ### Program starts but render output is missing / incomplete
-- Ensure FFmpeg is installed and available in `PATH`.
-- Check console output for:
-  - FFmpeg launch line
-  - FFmpeg exit code / trim warnings
+- Check console output for native MKV writer errors.
+- Make sure the runtime DLLs shipped with the release are next to `cmod_video.exe`.
 
 ### Missing DLL error on startup
 - Install Microsoft Visual C++ Redistributable 2015-2022 (x64)
