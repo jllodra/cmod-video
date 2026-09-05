@@ -37,7 +37,7 @@ Enjoy.
 ## Features
 - Supports tracker modules via `libopenmpt` (MOD/XM/IT/S3M and more...).
 - Real-time preview mode (default) with audio + video.
-- Offline render mode to `out.mkv` (`--render`) using the built-in H.264 + FLAC encoder.
+- Offline render mode to `out.mkv` (`--render`) using SVT-AV1 10-bit at CRF 18 plus lossless FLAC audio.
 - Themeable UI/colors (`theme.ini`).
 - Multiple track(channel) layouts:
   - `trackLayout=0`: legacy/classic
@@ -56,7 +56,99 @@ Enjoy.
 - Microsoft Visual C++ Redistributable 2015-2022 (x64)
 - Runtime DLLs included with the release package
 
+## Build and run on Arch Linux
+
+Install the local build dependencies:
+
+```bash
+sudo pacman -S --needed cmake ninja gcc pkgconf sdl2-compat sdl2_ttf sdl2_image libopenmpt libebur128 ffmpeg
+```
+
+The `ffmpeg` package supplies the libavcodec/libavformat development libraries.
+`cmod-video` links to those libraries directly; rendering does not launch or
+otherwise depend on the `ffmpeg` command-line executable.
+
+Configure and build:
+
+```bash
+cmake -S . -B build-linux -G Ninja \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DCMOD_BUILD_MEDIA_SMOKE=ON
+cmake --build build-linux
+```
+
+Preview and render:
+
+```bash
+./build-linux/cmod_video "music/song.it"
+./build-linux/cmod_video --render "music/song.it"
+```
+
+The encoded output is `out.mkv`. Offline rendering uses an in-memory SDL
+software renderer: it does not initialize SDL video/audio subsystems, create a
+window, or require an X11/Wayland session.
+
+### Linux workflow helper
+
+`cmod-video.sh` mirrors the PowerShell workflow without modifying or requiring
+the `.ps1` scripts. It supports local modules, generic HTTP(S) URLs, Modland
+URLs with directory-preserving cache, themes, title overrides and the
+`raw`/`osc`/`render` modes:
+
+```bash
+./cmod-video.sh ./music/song.it
+./cmod-video.sh ./music/song.it render
+./cmod-video.sh 'https://modland.com/pub/modules/Impulsetracker/Artist/song.it' render
+./cmod-video.sh 'http://modland.antarctica.no/pub/modules/Impulsetracker/Artist/song.it' render
+./cmod-video.sh ./music/song.it render 'Display title' --theme theme_skin.ini
+```
+
+Core helper dependency:
+
+```bash
+sudo pacman -S --needed curl
+```
+
+For thumbnail generation, install ImageMagick. The helper also uses `ffmpeg`
+and `ffprobe` to inspect the completed MKV and extract its middle frame; these
+commands are not used by the cmod-video renderer itself.
+
+```bash
+sudo pacman -S --needed imagemagick ffmpeg ttf-montserrat
+```
+
+The thumbnail uses the fonts and icon already bundled under `assets/`. If the
+thumbnail tools are missing, rendering still succeeds and leaves `out.mkv` and
+`desc.txt` intact.
+
+Copying `desc.txt` to the clipboard is also optional:
+
+```bash
+sudo pacman -S --needed wl-clipboard  # Wayland
+# or
+sudo pacman -S --needed xclip         # X11
+```
+
 ## Usage
+
+## Linux AppImage package
+
+The portable Linux release is built in Docker so its build environment and
+multimedia stack do not depend on the developer machine:
+
+```bash
+./packaging/build-appimage.sh
+```
+
+The result is `dist/cmod-video-x86_64.AppImage`. It bundles SDL, libopenmpt,
+libebur128, SVT-AV1 and a minimal LGPL-only FFmpeg build. The target machine
+still provides the Linux kernel, glibc compatibility, display/audio services
+and graphics drivers, but users do not need to install the application
+libraries themselves.
+
+The image is based on Ubuntu 22.04 to provide a conservative glibc baseline.
+The AppImage also contains the complete package copyright records and standard
+license texts indexed by `packaging/appimage/THIRD_PARTY_NOTICES.md`.
 
 ### Local player (double click)
 You can use `cmod_video.exe` as a local player by double-clicking it.
